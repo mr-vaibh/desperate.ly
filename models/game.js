@@ -7,7 +7,7 @@ const GameSchema = new Schema({
     email: { type: String, required: false },
     phone: { type: Number, required: [true, 'Your phone number is required'], maxlength: 10 },
     slug: { type: String, default: Math.random().toString(36).substring(2, 9), maxlength: 7 },
-    is_adult: { type: Boolean },
+    isAdult: { type: Boolean },
     score: { type: Number, default: 0 }
 });
 
