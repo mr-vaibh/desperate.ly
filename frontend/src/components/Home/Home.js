@@ -40,16 +40,13 @@ export default function Home() {
     }
 
     const navigate = useNavigate();
-    const goToLoginPage = (gameId) => navigate(`/success?gameId=${gameId}`);
+    const goToSuccessPage = (gameSlug) => navigate(`/success?gameSlug=${gameSlug}`);
 
     const handleSubmit = (e) => {
         e.preventDefault()
 
         axios.post('/webapi/game', { ...form })
             .then(res => {
-                console.log(res)
-                console.log(res.data)
-
                 setForm({
                     name: '',
                     phone: '',
@@ -57,9 +54,9 @@ export default function Home() {
                     isAdult: false,
                 })
 
-                goToLoginPage(res.data.slug)
+                goToSuccessPage(res.data.slug)
             })
-            .catch((err) => console.log(err));
+            .catch(err => console.log(err));
     }
 
     return (

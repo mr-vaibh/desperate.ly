@@ -2,8 +2,8 @@ import React from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import NotFound404 from './NotFound404'
 
-const Green = ({ gameId }) => {
-  const fullGameLink = window.location.origin + "/" + gameId
+const Green = ({ gameSlug }) => {
+  const fullGameLink = window.location.origin + "/" + gameSlug
   
   const copyLink = (link) => {
     navigator.clipboard.writeText(link)
@@ -11,7 +11,7 @@ const Green = ({ gameId }) => {
   }
   
   return (
-    <>
+    <div className="container w-50 my-5">
       <div className="alert alert-success" role="alert">
         <h3>Successfully created new game</h3>
       </div>
@@ -21,7 +21,7 @@ const Green = ({ gameId }) => {
         style={{cursor: "pointer"}}
         onClick={() => copyLink(fullGameLink)}
       >
-        Click to copy this link <Link to={"/" + gameId}>{fullGameLink}</Link>
+        Click to copy this link <Link to={"/" + gameSlug}>{fullGameLink}</Link>
       </h4>
 
       <p style={{fontStyle: "italic"}}>
@@ -29,21 +29,21 @@ const Green = ({ gameId }) => {
       </p>
 
       <Link to="/" className="btn btn-primary mt-3">back to Home</Link>
-    </>
+    </div>
   )
 }
 
 export default function Success() {
   const [searchParams] = useSearchParams()
-  const gameId = searchParams.get("gameId")
+  const gameSlug = searchParams.get("gameSlug")
 
   return (
-    <div className="container w-50 my-5">
+    <>
       {
-        gameId
-          ? <Green gameId={gameId} />
+        gameSlug
+          ? <Green gameSlug={gameSlug} />
           : <NotFound404 />
       }
-    </div>
+    </>
   )
 }

@@ -16,8 +16,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/success" element={<Success />} />
-        <Route path=":gameId" element={<Game />} />
-        <Route path="*" element={<NotFound404 />} />
+        <Route path=":gameSlug" element={<Game />} />
+        <Route path="/404" element={<NotFound404 />} />
       </Routes>
     </>
   );

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 export default function NotFound404() {
   return (
-    <div>
+    <div className="container w-50 my-5">
       <div className="alert alert-danger" role="alert">
         <h3>404 Page not found</h3>
       </div>
