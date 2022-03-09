@@ -9,9 +9,11 @@ export default function Game() {
   const gameSlug = window.location.pathname.slice(1)
 
   const [gameData, setGameData] = useState({})
-  // const [score, setScore] = useState(0)
+  const [score, setScore] = useState(0)
   const [question, setQuestion] = useState({})
   const [answers, setAnswers] = useState([])
+
+  const [correctAns, setCorrectAns] = useState(false)
 
   const navigate = useNavigate();
 
@@ -21,16 +23,17 @@ export default function Game() {
         if (res.data) {
           setGameData(res.data)
 
-          // setScore(res.data.score)
-          setRandomQuestion(res.data.score)
-          setRandomAnswers(res.data.score)
+          setScore(res.data.score)
+
+          setRandomQuestion(score)
+          setRandomAnswers(score)
 
         } else {
           navigate('/404')
         }
       })
       .catch(err => console.log(err))
-  }, [gameSlug, navigate])
+  }, [gameSlug, score, navigate])
 
   const setRandomQuestion = (number) => {
     const questionsOfNum = GameList[number]
@@ -42,7 +45,7 @@ export default function Game() {
   const setRandomAnswers = (number) => {
     const answers = [number]
 
-    while (answers.length <= 4) {
+    while (answers.length < 4) {
       const newNum = Math.floor(Math.random() * 10)
 
       if (!answers.includes(newNum)) {
@@ -51,8 +54,28 @@ export default function Game() {
     }
 
     answers.sort(() => Math.random() - 0.5555555)
-    
+
     setAnswers(answers)
+  }
+
+  const nextQnA = (number) => {
+    if (correctAns) {
+      setRandomQuestion(number)
+      setRandomAnswers(number)
+      setCorrectAns(false)
+    }
+  }
+
+  const updateScore = (e) => {
+    const number = e.target.getAttribute('score')
+
+    if (parseInt(number) === question.answer) {
+      axios.post(`/webapi/game/${gameSlug}`, { score: score + 1 })
+        .then(res => {
+          setCorrectAns(true)
+        })
+        .catch(err => console.log(err));
+    }
   }
 
   return (
@@ -66,10 +89,18 @@ export default function Game() {
       <div className="row">
 
         {
-          answers.map(eachNum => (
-            <div className="col-6">
+          answers.map((eachNum, index) => (
+            <div className="col-6" key={index}>
               <div className="form-check">
-                <input className="form-check-input" type="radio" name="answerRadio" id={`answerRadio${eachNum}`} />
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="answerRadio"
+                  id={`answerRadio${eachNum}`}
+                  score={eachNum}
+                  onClick={updateScore}
+                  value={eachNum}
+                />
                 <label className="form-check-label" htmlFor={`answerRadio${eachNum}`}>
                   {eachNum}
                 </label>
@@ -79,16 +110,12 @@ export default function Game() {
         }
       </div>
 
-      <div className="d-flex justify-content-between mt-5">
-        <div className="col-6">
-          <button className="btn btn-secondary">Previous</button>
-        </div>
-        <div className="col-6">
-          <button className="btn btn-primary">Next</button>
+      <div className="d-flex justify-content-end mt-5">
+        <div className="col-7">
+          <button type="button" className="btn btn-primary px-5" onClick={() => nextQnA(score + 1)} disabled={!correctAns}>Next</button>
         </div>
       </div>
 
-      {/* {gameData.score} */}
     </div>
   )
 }

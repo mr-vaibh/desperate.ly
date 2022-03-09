@@ -14,4 +14,10 @@ router.get('/game/:slug', (req, res, next) => {
         .catch(next);
 });
 
+router.post('/game/:slug', (req, res, next) => {
+    Game.findOneAndUpdate({ slug: req.params.slug }, req.body)
+        .then((data) => res.json(data))
+        .catch(next);
+});
+
 module.exports = router;

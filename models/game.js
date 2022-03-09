@@ -8,7 +8,7 @@ const GameSchema = new Schema({
     phone: { type: Number, required: [true, 'Your phone number is required'], maxlength: 10 },
     slug: { type: String, default: Math.random().toString(36).substring(2, 9), maxlength: 7 },
     isAdult: { type: Boolean },
-    score: { type: Number, default: 0 }
+    score: { type: Number, default: null }
 });
 
 // Create model for todo
